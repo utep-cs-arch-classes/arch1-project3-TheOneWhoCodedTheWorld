@@ -17,29 +17,31 @@
 #define GREEN_LED BIT6
 
 
-AbRect rect10 = {abRectGetBounds, abRectCheck, {10,10}}; /**< 10x10 rectangle */
-AbRArrow rightArrow = {abRArrowGetBounds, abRArrowCheck, 30};
+AbRect rect10 = {abRectGetBounds, abRectCheck, {4,4}}; /**< 10x10 rectangle */
+AbRArrow rightArrow = {abRArrowGetBounds, abRArrowCheck, 10};
 
 AbRectOutline fieldOutline = {	/* playing field */
   abRectOutlineGetBounds, abRectOutlineCheck,   
-  {screenWidth/2 - 10, screenHeight/2 - 10}
+  {screenWidth/2 - 2, screenHeight/2 - 2}
 };
+
 
 Layer layer4 = {
   (AbShape *)&rightArrow,
   {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
+										 {0,0}, {0,0},				    /* last & next pos */
   COLOR_PINK,
   0
 };
   
 
-Layer layer3 = {		/**< Layer with an orange circle */
+
+  Layer layer3 = {		/**< Layer with an orange circle */
   (AbShape *)&circle8,
   {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
   {0,0}, {0,0},				    /* last & next pos */
-  COLOR_VIOLET,
-  &layer4,
+  COLOR_PINK,
+  &layer4
 };
 
 
@@ -47,8 +49,8 @@ Layer fieldLayer = {		/* playing field as a layer */
   (AbShape *) &fieldOutline,
   {screenWidth/2, screenHeight/2},/**< center */
   {0,0}, {0,0},				    /* last & next pos */
-  COLOR_BLACK,
-  &layer3
+  COLOR_RED
+  // &layer3
 };
 
 Layer layer1 = {		/**< Layer with a red square */
@@ -59,13 +61,14 @@ Layer layer1 = {		/**< Layer with a red square */
   &fieldLayer,
 };
 
-Layer layer0 = {		/**< Layer with an orange circle */
-  (AbShape *)&circle14,
-  {(screenWidth/2)+10, (screenHeight/2)+5}, /**< bit below & right of center */
-  {0,0}, {0,0},				    /* last & next pos */
-  COLOR_ORANGE,
-  &layer1,
+  Layer layer0 = {		/**< Layer with an orange circle */
+  (AbShape *)&rect10,
+  {(screenWidth/2), (screenHeight/2)}, /**< bit below & right of center */
+										 {0,0}, {0,0},				    /* last & next pos */
+  COLOR_GREEN,
+   &layer1,
 };
+
 
 /** Moving Layer
  *  Linked list of layer references
@@ -78,9 +81,9 @@ typedef struct MovLayer_s {
 } MovLayer;
 
 /* initial value of {0,0} will be overwritten */
-MovLayer ml3 = { &layer3, {1,1}, 0 }; /**< not all layers move */
-MovLayer ml1 = { &layer1, {1,2}, &ml3 }; 
-MovLayer ml0 = { &layer0, {2,1}, &ml1 }; 
+//MovLayer ml3 = { &layer3, {1,1}, 0 }; /**< not all layers move */
+//MovLayer ml1 = { &layer1, {1,2} }; 
+MovLayer ml0 = { &layer1, {2,1} }; 
 
 void movLayerDraw(MovLayer *movLayers, Layer *layers)
 {
@@ -121,7 +124,7 @@ void movLayerDraw(MovLayer *movLayers, Layer *layers)
 
 
 
-//Region fence = {{10,30}, {SHORT_EDGE_PIXELS-10, LONG_EDGE_PIXELS-10}}; /**< Create a fence region */
+Region fence = {{10,30}, {SHORT_EDGE_PIXELS-10, LONG_EDGE_PIXELS-10}}; /**< Create a fence region */
 
 /** Advances a moving shape within a fence
  *  
@@ -148,7 +151,7 @@ void mlAdvance(MovLayer *ml, Region *fence)
 }
 
 
-u_int bgColor = COLOR_BLUE;     /**< The background color */
+u_int bgColor = COLOR_BLACK;     /**< The background color */
 int redrawScreen = 1;           /**< Boolean for whether screen needs to be redrawn */
 
 Region fieldFence;		/**< fence around playing field  */
@@ -187,7 +190,7 @@ void main()
     }
     P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
     redrawScreen = 0;
-    movLayerDraw(&ml0, &layer0);
+    // movLayerDraw(&ml0, &layer0);
   }
 }
 
@@ -205,3 +208,4 @@ void wdt_c_handler()
   } 
   P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }
+//
