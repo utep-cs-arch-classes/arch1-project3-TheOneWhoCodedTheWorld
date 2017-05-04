@@ -283,7 +283,7 @@ void wdt_c_handler()
     } // No else necessary, PADDLE will NOT move downward
 
     // If Player 1 wins
-    if(player1Scored > '9'){
+    if(player1Scored > '2'){
       drawChar5x7(11,screenHeight-8,'3',COLOR_BLACK,COLOR_PINK);
       mlBluP0.velocity.axes[0] = 0;
       mlBluP0.velocity.axes[1] = 0;
@@ -300,7 +300,7 @@ void wdt_c_handler()
     }
    
     // If Player 2 wins
-    if(player2Scored > '9')
+    if(player2Scored > '2')
     {
       drawChar5x7(screenWidth-13,screenHeight-8,'3',COLOR_BLUE,COLOR_PINK);
       mlBluP0.velocity.axes[0] = 0;
